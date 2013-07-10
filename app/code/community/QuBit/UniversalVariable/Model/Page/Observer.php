@@ -338,17 +338,19 @@ class QuBit_UniversalVariable_Model_Page_Observer {
     return $line_items;
   }
 
-  public function _setListing() {
-    $this->_listing = array();
-    if ($this->_isCategory()) {
-      $category = $this->_getCurrentCategory();
-    } elseif ($this->_isSearch()) {
-      $category = $this->_getCatalogSearch();
-      if (isset($_GET['q'])) {
-        $this->_listing['query'] = $_GET['q'];
-      }
+    public function _setListing($products) {
+        $this->_listing = array();
+        $productArray = array();
+        foreach ($products as $product) {
+            array_push($productArray, $this->_getProductModel($product));
+        }
+        $this->_listing['items'] = $productArray;
+        if ($this->_isSearch()) {
+            if (isset($_GET['q'])) {
+                $this->_listing['query'] = $_GET['q'];
+            }
+        }
     }
-  }
 
   public function _setProduct() {
     $product  = $this->_getCurrentProduct();
@@ -440,6 +442,11 @@ class QuBit_UniversalVariable_Model_Page_Observer {
     }
   }
 
+  public function setCatalogProductListing($observer) {
+   $products = $observer->getEvent()->getCollection();
+   $this->_setListing($products);
+  }
+
   public function setUniversalVariable($observer) {
     $this->_setUser();
     $this->_setPage();
@@ -448,13 +455,16 @@ class QuBit_UniversalVariable_Model_Page_Observer {
       $this->_setProduct();
     }
 
-    if ($this->_isCategory()) {
-      $this->_setListing();
-    }
+// ###### Removed this as it needs to be done on an observer
+//    if ($this->_isCategory()) {
+//      $this->_setListing();
+//    }
+//
+//    if ($this->_isCategory() || $this->_isSearch()) {
+//      $this->_setListing();
+//    }
+// #########################################################
 
-    if ($this->_isCategory() || $this->_isSearch()) {
-      $this->_setListing();
-    }
 
     if ($this->_isBasket() || $this->_isCheckout()) {
       $this->_setBasket();
