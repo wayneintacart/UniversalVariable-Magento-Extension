@@ -4,6 +4,9 @@
     <QuBit_UniversalVariable>
         <active>true</active>
         <codePool>community</codePool>
+        <depends>
+          <Mage_Catalog/>
+        </depends>
      </QuBit_UniversalVariable>
    </modules>
    <frontend>

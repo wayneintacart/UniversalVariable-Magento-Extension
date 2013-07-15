@@ -6,6 +6,10 @@
 
   $observer = 'universal_variable_main/observer';
   $mage = Mage::getSingleton($observer);
+  
+  $layout = $this->getLayout();
+  $mage->_setLayout($layout);
+  $mage->_setListing();
 
   if ($qubit_opentag_async == 1) {
   	$qubit_opentag_async = 'async defer';
